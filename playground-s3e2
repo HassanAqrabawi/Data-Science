@@ -1,0 +1,210 @@
+import numpy as np 
+import pandas as pd 
+import os
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+plt.style.use('fivethirtyeight')
+# import catboost as cb
+from scipy.stats import rankdata
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import KFold, StratifiedKFold, RepeatedStratifiedKFold
+from sklearn.metrics import roc_auc_score
+from sklearn.linear_model import LassoCV
+train = pd.read_csv("train.csv", index_col='id')
+test = pd.read_csv('test.csv', index_col='id')
+submission = pd.read_csv('sample_submission.csv')
+
+df_original = pd.read_csv('healthcare-dataset-stroke-data.csv', index_col='id')
+
+
+print('train', train.shape)
+print('test', test.shape)
+print('submission', submission.shape)
+print('df_original', df_original.shape)
+def describe_object(df, col_name):
+    print(f"\nCOLUMN: {col_name}")
+    print(f"{df[col_name].nunique()} different values")
+    print(f"List of values:")
+    print(df[col_name].value_counts(dropna=False, normalize=True))
+
+df_original.groupby(['stroke'])['stroke'].count()
+describe_object(train, 'stroke')
+
+train = pd.read_csv("train.csv", index_col='id')
+df_original_stroke = df_original.query('stroke == 1')
+df = pd.concat([train, df_original_stroke], ignore_index=True, sort=False)
+df = df.dropna(subset=['bmi'])
+missing_values_count = df.isna().sum()
+print(missing_values_count)
+def feature_risk_factors(df):
+    risk_factors = ((df['avg_glucose_level'] > 99).astype(int) +
+                    (df['age'] > 45).astype(int) +
+                    (df['bmi'] > 24.99).astype(int) +
+                    df['hypertension'] +
+                    df['heart_disease'] +
+                    (df['smoking_status'].isin(['formerly smoked', 'smokes'])).astype(int))
+    df['risk_factors'] = risk_factors
+    return df
+
+feature_risk_factors(df)
+def feature_risk_factors2(df):
+    risk_factors = pd.Series(dtype=int)
+    risk_factors = risk_factors.add((df['avg_glucose_level'] > 150).astype(int), fill_value=0)
+    risk_factors = risk_factors.add((df['age'] > 60).astype(int), fill_value=0)
+    df['risk_factors2'] = risk_factors
+    return df
+
+feature_risk_factors2(df)
+def feature_risk_factors3(df):
+    df['risk_factors2'] = 0
+    df.loc[df['ever_married'] == "Yes", 'risk_factors2'] += 1
+    df.loc[df['age'] > 65, 'risk_factors2'] += 1
+    return df
+
+feature_risk_factors3(df)
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load and preprocess data
+df = pd.read_csv("train.csv", index_col='id')
+df = df[df['bmi'].notna()]
+df = df.drop(['Residence_type', 'gender', 'work_type'], axis=1)
+df = pd.get_dummies(df, drop_first=True)
+X = df.drop(['stroke'], axis=1)
+y = df['stroke']
+scaler = StandardScaler()
+num_cols = ['age', 'avg_glucose_level', 'bmi']
+X[num_cols] = scaler.fit_transform(X[num_cols])
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+!pip install lightgbm
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_auc_score
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+import lightgbm as lgb
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Load data
+df = pd.read_csv("train.csv", index_col='id')
+df_original = pd.read_csv("healthcare-dataset-stroke-data.csv")
+
+# Merge datasets and remove rows with missing 'bmi'
+df_original_stroke = df_original.query('stroke == 1')
+df = pd.concat([df, df_original_stroke], ignore_index=True, sort=False)
+df = df[df['bmi'].notna()]
+
+# Create new features
+df['risk_factors'] = df[['avg_glucose_level', 'age', 'bmi', 'hypertension', 'heart_disease', 'smoking_status']].apply(
+        lambda x : 0 + (1 if x['avg_glucose_level'] > 99 else 0) +
+        (1 if x['age'] > 45 else 0) + (1 if x['bmi'] > 24.99 else 0) +
+        (1 if x['hypertension'] == 1 else 0) + (1 if x['heart_disease'] == 1 else 0) +
+        (1 if x['smoking_status'] in ['formerly smoked', 'smokes'] else 0), 
+        axis=1
+    )
+
+df['risk_factors2'] = df[['avg_glucose_level', 'age']].apply(
+        lambda x : 0 + (1 if x['avg_glucose_level'] > 150 else 0) +
+        (1 if x['age'] > 60 else 0)
+       ,axis=1
+    )
+
+df['risk_factors3'] = df[['ever_married', 'age']].apply(
+        lambda x : 0 + (1 if x['ever_married'] == "Yes" else 0) +
+        (1 if x['age'] > 65 else 0)
+       ,axis=1
+    )
+
+# Convert categorical variables to binary
+train_dummies = pd.get_dummies(df, drop_first=True)
+train_dummies = train_dummies.drop(['Residence_type_Urban', 'gender_Other', 'work_type_Never_worked', 'work_type_children'], axis=1)
+
+# Split dataset into train and test sets
+X = train_dummies.drop(['stroke'], axis=1)
+y = df['stroke']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+# Scale numeric features
+scaler = StandardScaler()
+num_cols = ['age', 'avg_glucose_level', 'bmi']
+X_train2 = X_train.copy()
+X_test2 = X_test.copy()
+X_train2[num_cols] = scaler.fit_transform(X_train2[num_cols])
+X_test2[num_cols] = scaler.transform(X_test2[num_cols])
+
+# Train model and calculate accuracy and confusion matrix
+clf = lgb.LGBMClassifier(random_state=42)
+clf.fit(X_train2, y_train)
+
+y_pred_acc = clf.predict(X_test2)
+score = accuracy_score(y_test, y_pred_acc)
+print("Accuracy-Score: %.2f%%" % (score * 100.0))
+
+y_pred_con = clf.predict(X_test2)
+conf_matrix = confusion_matrix(y_pred_con, y_test)
+print(conf_matrix)
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import roc_auc_score
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+import lightgbm as lgb
+
+# Reading the test dataset
+test = pd.read_csv('test.csv', index_col='id')
+
+# Feature engineering
+def feature_risk_factors(df):
+    df['risk_factors'] = df[['avg_glucose_level', 'age', 'bmi', 'hypertension', 'heart_disease', 'smoking_status']].apply(
+        lambda x : 0 + (1 if x['avg_glucose_level'] > 99 else 0) +
+        (1 if x['age'] > 45 else 0) + (1 if x['bmi'] > 24.99 else 0) +
+        (1 if x['hypertension'] == 1 else 0) + (1 if x['heart_disease'] == 1 else 0) +
+        (1 if x['smoking_status'] in ['formerly smoked', 'smokes'] else 0), 
+        axis=1
+    )
+    return df
+
+def feature_risk_factors2(df):
+    df['risk_factors2'] = df[['avg_glucose_level', 'age']].apply(
+        lambda x : 0 + (1 if x['avg_glucose_level'] > 150 else 0) +
+        (1 if x['age'] > 60 else 0)
+       ,axis=1
+    )
+    return df
+
+def feature_risk_factors3(df):
+    df['risk_factors2'] = df[['ever_married', 'age']].apply(
+        lambda x : 0 + (1 if x['ever_married'] == "Yes" else 0) +
+        (1 if x['age'] > 65 else 0)
+       ,axis=1
+    )
+    return df
+
+test = feature_risk_factors(test)
+test = feature_risk_factors2(test)
+test = feature_risk_factors3(test)
+print(test)
+# Processing the test dataset
+test_dummies = pd.get_dummies(test, drop_first=True)
+
+# Drop any extra features not in the training data
+extra_features = set(test_dummies.columns) - set(X_train2.columns)
+test_dummies = test_dummies.drop(extra_features, axis=1)
+
+scaler = StandardScaler()
+num_cols = ['age', 'avg_glucose_level', 'bmi']
+test_dummies[num_cols] = scaler.fit_transform(test_dummies[num_cols])
+
+# Making predictions and scoring
+clf = lgb.LGBMClassifier(random_state=42)
+clf.fit(X_train2, y_train)
+y_pred_prob = clf.predict_proba(test_dummies)[:,1] 
+submission = test.reset_index()[['id']]
+submission['stroke'] = y_pred_prob.tolist()
+
+# Saving the submission file
+submission.to_csv('submission.csv', index=False)
+
