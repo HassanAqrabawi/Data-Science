@@ -1,0 +1,87 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Predicting Stroke Risk Factors Using Machine Learning Techniques}
+\author{Hassan, Khalid, and Mohammed}
+
+\usepackage{biblatex}
+\addbibresource{mybibliography.bib} % Replace 'sample.bib' with the name of your .bib file
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This research paper aims to predict stroke risk factors using machine learning techniques. The study utilizes a dataset consisting of various health-related features, including age, average glucose level, body mass index (BMI), hypertension, heart disease, smoking status, and marital status [1]. The dataset is preprocessed and transformed to derive additional features related to stroke risk factors. Three different feature engineering approaches are employed to enhance the predictive power of the models. The dataset is split into train and test sets, and various machine learning models such as LightGBM, RandomForestClassifier, and ExtraTreesClassifier are trained and evaluated. The performance of the models is compared using accuracy score, confusion matrix, and receiver operating characteristic (ROC) curve analysis. The findings suggest that the proposed machine learning models [2] [3] can effectively predict stroke risk factors based on the given dataset.
+
+https://github.com/HassanAqrabawi/Data-Science.
+
+\end{abstract}
+
+\section{Introduction}
+
+Strokes are a significant global health concern, with serious implications for individuals' well-being, including severe health issues and potential fatality. Early identification of stroke risk factors plays a crucial role in implementing preventive measures and enabling timely interventions, ultimately reducing the burden of stroke-related complications. In this research, our primary objective is to predict stroke risk factors using machine learning techniques, which have shown promise in various healthcare domains.
+
+To accomplish this, we leverage a dataset that encompasses a wide range of health-related features, providing valuable insights into potential risk factors associated with strokes. However, raw data alone may not be[4] sufficient for accurate predictions. Hence, we employ feature engineering methods to extract more meaningful and relevant information from the dataset [4]. These techniques enable us to derive additional features that have a stronger correlation with stroke risk factors, thereby enhancing the predictive capabilities of our machine-learning models.
+
+The performance of multiple machine learning models is evaluated and compared to identify the most effective approach for stroke risk factor prediction. These models encompass a diverse range of algorithms, such as LightGBM, RandomForestClassifier, and ExtraTreesClassifier. By comparing their performance metrics, such as accuracy scores, confusion matrices, and ROC curves, we can assess their predictive power and select the most suitable model for this particular task. This comparative analysis enables us to gain insights into the strengths and weaknesses of each model and make informed decisions regarding their application in stroke risk factor prediction.
+
+By leveraging machine learning techniques and comprehensive evaluation methods, our research aims to contribute to the existing knowledge on stroke risk factors. The outcomes of this study have the potential to inform healthcare professionals, researchers, and []policymakers about effective strategies for early identification of stroke risk factors. Ultimately, our goal is to support the development of targeted preventive measures and interventions, enabling better management and care for individuals at risk of strokes.
+
+\section{Description of Data and Methods:}
+The dataset utilized in this study encompasses a diverse range of demographic and health-related features, including age, average glucose level, body mass index (BMI), hypertension, heart disease, smoking status, and marital status. These features provide valuable insights into various aspects of an individual's health profile that may contribute to their susceptibility to strokes. However, before conducting the analysis, the dataset undergoes a thorough exploration and preprocessing stage to ensure data quality and handle any missing values [5].
+
+To enhance the predictive capabilities of our models, we employ three different feature engineering approaches. These approaches allow us to derive additional features that are specifically tailored to capture important aspects related to stroke risk factors. By incorporating these derived features into our analysis, we aim to capture more nuanced relationships between the predictors and the target variable, enabling more accurate predictions.
+
+To evaluate the performance of our machine learning models, we divide the dataset into training and testing subsets. The training subset is used for model development, where various machine learning techniques are employed, including LightGBM, RandomForestClassifier [6], and ExtraTreesClassifier. These models are trained on the training subset, allowing them to learn patterns and relationships within the data.
+
+Once the models are trained, their performance is evaluated using several metrics, including accuracy score, confusion matrix, and ROC curve analysis. The accuracy score provides an overall measure of how well the models can predict stroke risk factors. The confusion matrix allows us to assess the model's performance in terms of true positives, true negatives, false positives, and false negatives. Furthermore, the ROC curve analysis provides insights into the models' ability to discriminate between different risk levels.
+
+By employing a diverse set of machine learning techniques and utilizing rigorous evaluation metrics, our study aims to provide a comprehensive analysis of the dataset and enable effective prediction of stroke risk factors. The combination of feature engineering and machine learning algorithms allows us to extract meaningful insights from the data and build models that have the potential to identify individuals at a higher risk of experiencing strokes.
+
+\section{Results and Analysis:}
+
+The performance of the machine learning models in predicting stroke risk factors is analyzed and compared. The accuracy scores, confusion matrices, and ROC curves of the models are presented. The results demonstrate that the models achieve good predictive performance, with accuracy scores ranging from 84.7 percent to 95.41 percent. The ROC curve analysis indicates that the models have high discriminative power in identifying stroke risk factors [7]. The findings highlight the effectiveness of machine learning techniques in predicting stroke risk factors and contribute to the understanding of their potential application in identifying individuals at high risk of stroke.
+Accuracy-Score: 95.41%
+[[4806  213]
+ [  22   79]]
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8
+\linewidth]{download (1).png}
+\caption{\label{fig:frog} Accuracy Graph.}
+\end{figure}
+
+
+
+\section{Evaluation, Limitations, and Future Work:}
+The overall approach and limitations of the methods used in the study are evaluated. The strengths and weaknesses of the employed models and feature engineering techniques [8] are analyzed. The evaluation of the approach includes assessing its effectiveness in predicting stroke risk factors based on the chosen machine learning techniques and feature engineering methods. The strengths of the models and techniques used are highlighted, such as their ability to achieve high accuracy scores and good discriminative power in identifying stroke risk factors.
+
+However, it is important to acknowledge the limitations of the study. One potential limitation is the quality and representativeness of the dataset. The dataset used in this research may have certain limitations, such as missing values or imbalanced classes, which could impact the performance and generalizability of the models. These limitations are addressed by preprocessing the data to handle missing values and ensuring data quality [5]. Additionally, techniques like data augmentation or balancing methods could be explored in future research to mitigate the impact of imbalanced classes.
+
+During the analysis, some surprising findings or unexpected observations may have emerged. These findings can provide valuable insights and highlight areas for further investigation. The discussion section should elaborate on these findings and their implications, offering interpretations and possible explanations for any unexpected results.
+
+Furthermore, suggestions for future research directions and improvements to the models or feature engineering approaches can be provided. For example, incorporating more advanced machine learning algorithms or exploring ensemble techniques could enhance the predictive performance of the models. Additionally, considering additional relevant features or exploring alternative feature engineering approaches could provide further insights into stroke risk factors prediction. It is important to outline these future research directions to inspire and guide further studies in the field.
+
+Overall, the evaluation of the approach, addressing limitations, discussing surprising findings, and providing suggestions for future research, contribute to the comprehensive analysis of the study and demonstrate a critical understanding of the research outcomes.
+
+
+% \section{References}
+% \addbibresource{mybibliography.bib} % Replace 'sample.bib' 
+\nocite{*}
+\printbibliography
+\end{document}
+
